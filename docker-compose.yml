@@ -4,7 +4,7 @@ services:
   Mordhau-Wine:
     restart: unless-stopped
     container_name: mordhau
-    image: kamoodovsky/mordhau
+    image: m7mdbinghaith/mordhau
     network_mode: "bridge"
     volumes:
       - /home/mohammad/mordhau/server:/mordhau
