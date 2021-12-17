@@ -9,7 +9,7 @@ services:
   Mordhau:
     restart: unless-stopped
     container_name: mordhau
-    image: kamoodovsky/mordhau
+    image: m7mdbinghaith/mordhau
     network_mode: "bridge"
     volumes:
       - /home/mohammad/mordhau/server:/mordhau #change to your path before : so it would go as /yourpath/:/mordhau
