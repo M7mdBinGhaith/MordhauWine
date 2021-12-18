@@ -18,7 +18,7 @@ services:
     ports:
       - "7777:7777/udp"
       - "27015:27015/udp"
-      - "15000:15000/tcp"
+      - "15000:15000/udp"
     environment:
       - UID=1000 # set this to match your UID to get your UID in linux type this in the terminal  id -u ${USER}
       #- Port=7777  # I recommend you change from port bindings above and leave this to default  
