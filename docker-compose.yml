@@ -14,6 +14,7 @@ services:
       - "7777:7777/udp"
       - "27015:27015/udp"
       - "15000:15000/udp"
+      - "2766:2766" # this is for rcon change as it suits you
     environment:
       - UID=1000
       #- Port=7777
