@@ -27,3 +27,5 @@ services:
     cap_add:
       - CAP_NET_ADMIN
 ```
+# Notes
+Make sure to forward the following ports on your firewall, 15000/UDP 7777/UDP 15000/UDP
