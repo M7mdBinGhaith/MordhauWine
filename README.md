@@ -13,7 +13,6 @@ services:
     network_mode: "bridge"
     volumes:
       - /home/${USER}/mordhau/server:/mordhau #change to your path before : so it would go as /yourpath/:/mordhau
-      - /home/${USER}/mordhau/config:/config  #change to your path before : so it would go as /yourpath/:/config
     tty: true
     ports:
       - "7777:7777/udp"
