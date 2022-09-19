@@ -1,7 +1,7 @@
 FROM cm2network/steamcmd
 LABEL MAINTAINER=M7mdBinGhaith
 USER root
-ENV WineVersion 6.6~buster-1
+ENV WineVersion 6.6~bullseye-1
 ENV UID 1000
 RUN dpkg --add-architecture i386 && \
         cd /tmp && \
