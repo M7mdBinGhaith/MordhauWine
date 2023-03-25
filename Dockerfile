@@ -9,8 +9,8 @@ RUN dpkg --add-architecture i386 && \
         apt -y install gnupg2 software-properties-common xvfb wget gosu cabextract && \
         wget -qO - https://dl.winehq.org/wine-builds/winehq.key | apt-key add - && \
         apt-add-repository https://dl.winehq.org/wine-builds/debian/ && \
-        wget -O- -q https://download.opensuse.org/repositories/Emulators:/Wine:/Debian/Debian_10/Release.key | apt-key add - && \
-        echo "deb http://download.opensuse.org/repositories/Emulators:/Wine:/Debian/Debian_10 ./" | tee /etc/apt/sources.list.d/wine-obs.list && \
+        wget -qO - https://download.opensuse.org/repositories/Emulators:/Wine:/Debian/Debian_11/Release.key | gpg --dearmor | tee /etc/apt/trusted.gpg.d/winehq.gpg >/dev/null && \
+        echo "deb http://download.opensuse.org/repositories/Emulators:/Wine:/Debian/Debian_11/ ./" | tee /etc/apt/sources.list.d/wine-obs.list && \
         apt update && \
         apt -y install --no-install-recommends winehq-staging=${WineVersion} wine-staging=${WineVersion} wine-staging-amd64=${WineVersion} wine-staging-i386=${WineVersion} && \
         apt -y --purge remove software-properties-common gnupg2 && \
