@@ -1,47 +1,30 @@
 # Mordhau Server Docker Container
 
-A Docker container for running a Mordhau game server using Wine, allowing for mod support and optimized resource usage by running on a headless Linux server.
+A Docker container for running a Mordhau game server using Wine, optimized for headless Linux operation.
 
 ## Features
 
 - Runs Mordhau server using Wine for full mod support
-- Optimized for Linux headless operation
 - Automatic updates and server management
 - RCON support for remote administration
-- Persistent data storage using Docker volumes
-
-## Prerequisites
-
-- Docker and Docker Compose installed
-- Linux host system
-- Sufficient system resources (RAM, CPU)
-- Required ports open on firewall
-
-## Port Configuration
-
-The server uses the following ports:
-- `7777/UDP`: Main game server port
-- `27015/UDP`: Server query port
-- `15000/UDP`: Server beacon port
-- `2766/TCP`: RCON port for server administration
+- Persistent data storage
 
 ## Installation
 
-### Using Docker Compose (Recommended)
+### Using Docker Compose
 
-1. Create a `docker-compose.yml` file with the following content:
-
+1. Create `docker-compose.yml`:
 ```yaml
 version: '3.3'
 services:
-  Mordhau:
+  Mordhau-Wine:
     restart: unless-stopped
     container_name: mordhau-server
     image: m7mdbinghaith/mordhau
     network_mode: "bridge"
     volumes:
-      - mordhau-data:/mordhau
-      - mordhau-config:/config
+      - ./mordhau/server:/mordhau
+      - ./mordhau/config:/config
     ports:
       - "7777:7777/udp"
       - "27015:27015/udp"
@@ -51,20 +34,15 @@ services:
       - UID=1000
     cap_add:
       - CAP_NET_ADMIN
-
-volumes:
-  mordhau-data:
-  mordhau-config:
 ```
 
-2. Start the container:
+2. Start the server:
 ```bash
 docker-compose up -d
 ```
 
-### Using Docker Directly
+### Using Docker
 
-Run the container:
 ```bash
 docker run -d \
   --name mordhau-server \
@@ -72,61 +50,39 @@ docker run -d \
   -p 27015:27015/udp \
   -p 15000:15000/udp \
   -p 2766:2766 \
-  -v mordhau-data:/mordhau \
-  -v mordhau-config:/config \
+  -v ./mordhau/server:/mordhau \
+  -v ./mordhau/config:/config \
   m7mdbinghaith/mordhau
 ```
 
-## Server Management
+## Port Configuration
 
-### Viewing Logs
-```bash
-docker logs mordhau-server
-```
-
-### RCON Access
-Connect to the server using an RCON client on port 2766. Default RCON password is set in the server configuration.
-
-### Server Configuration
-Server configuration files are stored in the `mordhau-config` volume. You can modify settings like:
-- Server name
-- Game mode
-- Player count
-- Password protection
-- RCON password
+- `7777/UDP`: Game Server
+- `27015/UDP`: Server Query
+- `15000/UDP`: Server Beacon
+- `2766/TCP`: RCON
 
 ## Firewall Configuration
 
-Ensure the following ports are open on your firewall:
-```bash
-sudo firewall-cmd --permanent --add-port=7777/udp
-sudo firewall-cmd --permanent --add-port=27015/udp
-sudo firewall-cmd --permanent --add-port=15000/udp
-sudo firewall-cmd --permanent --add-port=2766/tcp
-sudo firewall-cmd --reload
-```
+Ensure these ports are open in your firewall:
+- UDP: 7777, 27015, 15000
+- TCP: 2766
+
+## Server Management
+
+- View logs: `docker logs mordhau-server`
+- RCON access: Port 2766
+- Configuration: Modify files in `./mordhau/config`
 
 ## Troubleshooting
 
-1. **Server Not Showing in Browser**
-   - Verify all ports are open and forwarded correctly
-   - Check server logs for any errors
-   - Ensure the server is properly broadcasting
+1. **Server Not Showing**
+   - Check port forwarding
+   - Verify firewall settings
+   - Check server logs
 
 2. **Connection Issues**
-   - Verify client can reach the server IP
-   - Check firewall settings
-   - Ensure correct port forwarding on router
+   - Verify network connectivity
+   - Check router port forwarding
+   - Ensure correct firewall rules
 
-3. **Performance Issues**
-   - Monitor system resources
-   - Adjust player count if necessary
-   - Check for any network bottlenecks
-
-## Contributing
-
-Feel free to submit issues and enhancement requests!
-
-## License
-
-This project is licensed under the MIT License - see the LICENSE file for details.
