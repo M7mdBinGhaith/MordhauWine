@@ -1,31 +1,88 @@
-# MordhauWine
-Mordhau Docker container with wine to run mods that are not supported for the Linux version of Mordhau and potentially saving ram by elimnating windows os and running headless linux server if you prefer to.
-# Docker compose 
-You can easily install Docker compose and copy the below content and configure it to suit your need and save it to docker-compose.yml and <b>run</b> docker-compose up <br> 
-the file in the repo without explanition if you prefer download that
-```
+# Mordhau Server Docker Container
+
+A Docker container for running a Mordhau game server using Wine, optimized for headless Linux operation.
+
+## Features
+
+- Runs Mordhau server using Wine for full mod support
+- Automatic updates and server management
+- RCON support for remote administration
+- Persistent data storage
+
+## Installation
+
+### Using Docker Compose
+
+1. Create `docker-compose.yml`:
+```yaml
 version: '3.3'
 services:
-  Mordhau:
+  Mordhau-Wine:
     restart: unless-stopped
-    container_name: mordhau
+    container_name: mordhau-server
     image: m7mdbinghaith/mordhau
     network_mode: "bridge"
     volumes:
-      - /home/${USER}/mordhau/server:/mordhau #change to your path before : so it would go as /yourpath/:/mordhau
-    tty: true
+      - ./mordhau/server:/mordhau
+      - ./mordhau/config:/config
     ports:
       - "7777:7777/udp"
       - "27015:27015/udp"
       - "15000:15000/udp"
-      - "2766:2766" # this is for rcon change as it suits you 
+      - "2766:2766"
     environment:
-      - UID=1000 # set this to match your UID to get your UID in linux type this in the terminal  id -u ${USER}
-      #- Port=7777  # I recommend you change from port bindings above and leave this to default  
-      #- QueryPort=27015
-      #- BeaconPort=15000
+      - UID=1000
     cap_add:
       - CAP_NET_ADMIN
 ```
-# Notes
-Make sure to forward the following ports on your firewall, 15000/UDP 7777/UDP 15000/UDP
+
+2. Start the server:
+```bash
+docker-compose up -d
+```
+
+### Using Docker
+
+```bash
+docker run -d \
+  --name mordhau-server \
+  -p 7777:7777/udp \
+  -p 27015:27015/udp \
+  -p 15000:15000/udp \
+  -p 2766:2766 \
+  -v ./mordhau/server:/mordhau \
+  -v ./mordhau/config:/config \
+  m7mdbinghaith/mordhau
+```
+
+## Port Configuration
+
+- `7777/UDP`: Game Server
+- `27015/UDP`: Server Query
+- `15000/UDP`: Server Beacon
+- `2766/TCP`: RCON
+
+## Firewall Configuration
+
+Ensure these ports are open in your firewall:
+- UDP: 7777, 27015, 15000
+- TCP: 2766
+
+## Server Management
+
+- View logs: `docker logs mordhau-server`
+- RCON access: Port 2766
+- Configuration: Modify files in `./mordhau/config`
+
+## Troubleshooting
+
+1. **Server Not Showing**
+   - Check port forwarding
+   - Verify firewall settings
+   - Check server logs
+
+2. **Connection Issues**
+   - Verify network connectivity
+   - Check router port forwarding
+   - Ensure correct firewall rules
+
